@@ -47,13 +47,8 @@ public class TaskController {
 	
 	@PostMapping("/")
 	public ResponseEntity<ApiResponse> createTask(@RequestBody TaskRequest req){
-		Task task=new Task();
-		task.setStatus(Status.PENDING);
-		task.setDescription(req.getDescription());
-		task.setTitle(req.getTitle());
-		task.setDue_date(req.getDue_date());
-		task.setUserId(req.getUserId());
-		taskService.createTask(task);
+	
+		taskService.createTask(req);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Task Created Successfully", true) ,HttpStatus.OK);
 	}
 	

@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.taskmangement.config.AppConstants;
 import com.example.taskmangement.dto.Status;
 import com.example.taskmangement.dto.Task;
 import com.example.taskmangement.dto.User;
 import com.example.taskmangement.request.TaskRequest;
 import com.example.taskmangement.response.ApiResponse;
+import com.example.taskmangement.response.TaskResponse;
 import com.example.taskmangement.service.TaskService;
 import com.example.taskmangement.service.UserService;
 @RestController
@@ -33,8 +36,12 @@ public class AdminController {
 	
 	
 	@GetMapping("/")
-	public ResponseEntity<List<Task>> getAllTasks(){
-		return new ResponseEntity<List<Task>>(taskService.getTasks(),HttpStatus.OK);
+	public ResponseEntity<TaskResponse> getAllTasks(@RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+			@RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY,required = false) String sortBy,
+			@RequestParam(value = "sortDir",defaultValue = AppConstants.SORT_DIR,required = false) String sortDir
+			){
+		return new ResponseEntity<TaskResponse>(taskService.getTasks(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK);
 	}
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<Task>> getTaskByUserId(@PathVariable Integer userId){
@@ -54,13 +61,8 @@ public class AdminController {
 	
 	@PostMapping("/")
 	public ResponseEntity<ApiResponse> createTask(@RequestBody TaskRequest req){
-		Task task=new Task();
-		task.setStatus(Status.PENDING);
-		task.setDescription(req.getDescription());
-		task.setTitle(req.getTitle());
-		task.setDue_date(req.getDue_date());
-		task.setUserId(req.getUserId());
-		taskService.createTask(task);
+	
+		taskService.createTask(req);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Task Created Successfully", true) ,HttpStatus.OK);
 	}
 	

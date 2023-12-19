@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.example.taskmangement.dto.Task;
 import com.example.taskmangement.request.TaskRequest;
+import com.example.taskmangement.response.TaskResponse;
 
 public interface TaskService {
 
-	public Task createTask(Task task);
+	public Task createTask(TaskRequest req);
 	
-	public List<Task> getTasks();
+	public TaskResponse getTasks(Integer pageNumber, Integer pageSize,String sortBy,String sortDir);
 	
 	public List<Task> getTaskByUser(Integer userId);
 	

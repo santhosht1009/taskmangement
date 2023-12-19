@@ -57,7 +57,10 @@ public class SecurityConfig {
 
 	    	http.csrf(AbstractHttpConfigurer::disable)
 	    	   .authorizeHttpRequests(req ->
+	    	   
                req.requestMatchers("/api/v1/auth/**")
+                       .permitAll()
+                       .requestMatchers("/swagger-ui/**","/v3/api-docs/**")
                        .permitAll()
 //                       .requestMatchers(HttpMethod.GET)
 //       				.permitAll()	  
